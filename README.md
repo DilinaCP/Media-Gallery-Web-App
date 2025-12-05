@@ -1,1 +1,1 @@
-# -Media-Gallery-Web-App
+# Media-Gallery-Web-App
