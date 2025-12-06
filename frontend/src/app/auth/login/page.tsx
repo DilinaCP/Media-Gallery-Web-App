@@ -1,12 +1,14 @@
 "use client"
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
- const LoginForm = () =>{
+ const LoginForm = () => {
         const router = useRouter();
         const [error, setError] = useState<{ email?: string; password?: string }>({});
+        const [showPassword, setShowPassword] = useState(false);
         const [formData, setFormData] = useState({
             email: '',
             password: '',
@@ -46,6 +48,10 @@ import { FcGoogle } from 'react-icons/fc';
             }
         };
 
+        const togglePasswordVisibility = () => {
+            setShowPassword(!showPassword);
+        };
+
     return (
         <>
             <div className='flex items-center justify-center min-h-screen bg-blue-300'>
@@ -67,20 +73,28 @@ import { FcGoogle } from 'react-icons/fc';
                             />
                             {error.email && <span className='text-red-500 text-sm mt-1'>{error.email}</span>}
                         </div>
-                        <div>
+                        <div className='relative'>
                             <input 
-                                className="w-96 px-4 py-2 rounded-lg focus:outline-none focus:ring-1 border bg-white"
-                                type="password" 
+                                className="w-96 px-4 py-2 pr-10 rounded-lg focus:outline-none focus:ring-1 border bg-white"
+                                type={showPassword ? "text" : "password"}
                                 id='password'
                                 name="password" 
                                 placeholder="Password"
                                 value={formData.password}
                                 onChange={handleChange}
                             />
-                            {error.password && <span className='text-red-500 text-sm mt-1'>{error.password}</span>}
+                            <span
+                                onClick={togglePasswordVisibility}
+                                className='absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500'
+                            >
+                                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                            </span>
+                            {error.password && <div className='text-red-500 text-sm mt-1'>{error.password}</div>}
                         </div>
-                        <button className='text-blue-600 ml-2 cursor-pointer text-sm'>
-                            Forgot Password?
+                        <button 
+                            type='button'
+                            className='text-blue-600 ml-2 cursor-pointer text-sm'>
+                                Forgot Password?
                         </button>
                         <button
                             className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer"
