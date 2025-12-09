@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import Button from '@/app/components/common/Button';
 
  const LoginForm = () => {
         const router = useRouter();
@@ -96,12 +97,14 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
                             className='text-blue-600 ml-2 cursor-pointer text-sm'>
                                 Forgot Password?
                         </button>
-                        <button
-                            className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer"
-                            type ="submit"
+                        <div className='w-full justify-center'>
+                            <Button
+                                type='submit'
+                                className='w-full'
                             >
                                 LogIn
-                        </button>
+                            </Button>
+                        </div>
                         <p className="text-gray-500 text-sm">
                             Don't have an account?
                             <button

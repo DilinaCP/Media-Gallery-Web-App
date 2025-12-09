@@ -2,6 +2,7 @@
 
 import Sidebar from "../components/layout/Sidebar";
 import Header from "../components/layout/Header"
+import Link from 'next/link';
 
 const Gallery = () => {
     
@@ -36,21 +37,25 @@ const mockUploads = [
                     <Header />
                     <div className="grid grid-cols-2 md:grid-cols-4 p-10 gap-8 pt-20 pl-56 min-h-screen">
                         {mockUploads.map((img) => (
-                            <div key={img.id} className="bg-white rounded-lg shadow p-2">
-                            <img
+                            <Link
+                                key={img.id}
+                                href={`/gallery/${img.id}`}
+                                className="block bg-white rounded-lg shadow p-2 hover:scale-105 transition"
+                            >
+                                <img
                                 src={img.url}
                                 alt={img.name}
                                 className="w-full h-40 object-cover rounded"
                                 />
-                                <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
-                            </div>
+                                <p className="mt-2 text-sm font-medium text-center">
+                                {img.name}
+                                </p>
+                            </Link>
                         ))}
                     </div>
                 </div>
             </div>  
-
         </div>
-        
     )
 }
 
