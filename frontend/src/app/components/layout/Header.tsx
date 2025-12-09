@@ -3,10 +3,17 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Modal from '../common/Modal';
+import ProfileCard from '../common/Profile';
+import { userEmail } from '@/app/lib/auth';
 
 const Header = () => {
   const router = useRouter();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  const handleProfileClick = () => {
+    setShowProfileModal(true);
+  };
 
   const handleLogoutClick = () => {
     setShowLogoutModal(true);
@@ -26,7 +33,20 @@ const Header = () => {
         <header className="h-16 bg-white shadow flex justify-center items-center px-6 relative">
           <h1 className="text-2xl font-bold">Media Gallery</h1>
           <div className="flex items-center gap-4 absolute right-6">
-            <span className="text-sm text-gray-600">Hi, User</span>
+            <button 
+              onClick={handleProfileClick}
+              className="text-sm text-gray-600 hover:text-gray-900 cursor-pointer transition-colors"
+            >
+            {userEmail}
+            </button>
+            {showProfileModal && (
+              <ProfileCard 
+                isModal={true} 
+                isOpen={showProfileModal}
+                onClose={() => setShowProfileModal(false)}
+              />
+            )}
+            
             <button 
               className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 cursor-pointer"
               onClick={handleLogoutClick}
