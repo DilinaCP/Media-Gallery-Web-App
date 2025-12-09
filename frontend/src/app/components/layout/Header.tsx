@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Modal from '../common/Modal';
 import ProfileCard from '../common/Profile';
 import { userEmail } from '@/app/lib/auth';
+import Button from '../common/Button';
 
 const Header = () => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const Header = () => {
 
     return(
         <>
-        <header className="h-16 bg-white shadow flex justify-center items-center px-6 relative">
+        <header className="fixed top-0 left-0 right-0 h-16 bg-white shadow flex justify-center items-center px-6 z-50">
           <h1 className="text-2xl font-bold">Media Gallery</h1>
           <div className="flex items-center gap-4 absolute right-6">
             <button 
@@ -47,12 +48,12 @@ const Header = () => {
               />
             )}
             
-            <button 
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 cursor-pointer"
+            <Button
               onClick={handleLogoutClick}
+              variant='danger'
             >
               Logout
-            </button>
+            </Button>
           </div>
         </header>
 

@@ -5,17 +5,14 @@ import RecentUploads from "../components/dashboard/RecentUploads";
 
 const Dashboard = () => {
     return (
-        <div className="flex flex-col gap-8">
-
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatsCard title="Total Uploads" value={128} />
-            <StatsCard title="Storage Used" value="2.4 GB" />
-            <StatsCard title="Messages" value={32} />
-            <StatsCard title="Tags" value={15} />
-        </section>
-
-        <RecentUploads />
-
+        <div className="flex flex-col gap-8 pt-16 pl-56 min-h-screen bg-gray-50">
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <StatsCard title="Total Uploads" value={128} />
+                <StatsCard title="Storage Used" value="2.4 GB" />
+                <StatsCard title="Messages" value={32} />
+                <StatsCard title="Tags" value={15} />
+            </section>
+            <RecentUploads />
         </div>
     );
 }

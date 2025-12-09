@@ -5,9 +5,9 @@ import Link from "next/link";
 const Sidebar = () => {
   return (
     <div>
-      <div className="min-h-screen">
+      <div className="min-h-screen fixed">
         <div className="flex-1 flex flex-col">
-          <aside className="w-50 bg-gray-900 text-white p-6 flex flex-col min-h-screen items-center">
+          <aside className="w-50 bg-blue-950 text-white p-6 flex flex-col min-h-screen items-center">
             <nav className="flex flex-1/5 flex-col gap-8 justify-start pt-32 text-center">
             <Link href="/dashboard" className="hover:text-blue-400">Dashboard</Link>
             <Link href="/gallery" className="hover:text-blue-400">Gallery</Link>

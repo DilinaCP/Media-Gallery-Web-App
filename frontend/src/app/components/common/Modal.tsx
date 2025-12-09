@@ -1,6 +1,7 @@
 "use client"
 
 import React from 'react';
+import Button from './Button'
 
 interface ModalProps {
   isOpen: boolean;
@@ -35,18 +36,17 @@ const Modal: React.FC<ModalProps> = ({
         <p className="text-gray-900 mb-6">{message}</p>
         
         <div className="flex justify-end gap-3">
-          <button
+          <Button
             onClick={onClose}
-            className="px-4 py-2 bg-blue-300 text-blue-950 rounded hover:bg-blue-500 transition-colors cursor-pointer"
           >
             {cancelText}
-          </button>
-          <button
-            onClick={onConfirm}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-800 transition-colors cursor-pointer"
+          </Button>
+          <Button
+          onClick={onConfirm}
+          variant='danger'
           >
-            {confirmText}
-          </button>
+             {confirmText}
+          </Button>
         </div>
       </div>
     </div>

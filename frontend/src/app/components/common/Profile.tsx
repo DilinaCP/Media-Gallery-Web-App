@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { userEmail, userRole } from '@/app/lib/auth';
+import Button from './Button';
 
 type Profile = {
   email: string;
@@ -55,12 +56,11 @@ export default function ProfileCard({ isModal = false, isOpen = false, onClose =
             <div className="relative bg-blue-100 rounded-xl shadow-xl max-w-md w-full mx-4 p-6 z-10">
               {profileContent}
               <div className="flex justify-end gap-3 mt-6">
-                <button
+                <Button
                   onClick={handleClose}
-                  className="px-4 py-2 bg-blue-300 text-blue-950 rounded hover:bg-blue-500 transition-colors cursor-pointer"
                 >
                   Close
-                </button>
+                </Button>
               </div>
             </div>
           </div>
