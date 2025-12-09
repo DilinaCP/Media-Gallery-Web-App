@@ -10,8 +10,8 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
         const [error, setError] = useState<{ email?: string; password?: string }>({});
         const [showPassword, setShowPassword] = useState(false);
         const [formData, setFormData] = useState({
-            email: '',
-            password: '',
+            email: 'admin@gmail.com',
+            password: '12345',
         });
 
         const validationForm = (data:any) => {
@@ -44,7 +44,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
             if (Object.keys(validationErrors).length === 0){
                 console.log('Form Data: ', formData)
-                router.push('/pages/dashboard');
+                router.push('/dashboard');
             }
         };
 

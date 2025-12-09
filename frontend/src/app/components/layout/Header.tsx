@@ -1,0 +1,20 @@
+"use client"
+
+const Header = () => {
+
+    return(
+        <>
+        <header className="h-16 bg-white shadow flex justify-center items-center px-6 relative">
+          <h1 className="text-2xl font-bold">Media Gallery</h1>
+          <div className="flex items-center gap-4 absolute right-6">
+            <span className="text-sm text-gray-600">Hi, User</span>
+            <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 cursor-pointer">
+              Logout
+            </button>
+          </div>
+        </header>
+        </>
+    )
+}
+
+export default Header;
