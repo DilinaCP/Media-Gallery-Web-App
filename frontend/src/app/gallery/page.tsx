@@ -57,17 +57,14 @@ export default function GalleryPage() {
   return (
     <div className="min-h-screen flex bg-gray-100">
       <Sidebar />
-
       <div className="flex-1 flex flex-col">
         <Header />
-
         <div className="p-10 pt-20 pl-56">
           <ImageGrid
             images={mockUploads}
             onImageClick={openImage}
           />
         </div>
-
         {activeIndex !== null && (
           <ImageCard
             image={mockUploads[activeIndex]}

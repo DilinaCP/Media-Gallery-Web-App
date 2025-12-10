@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
 import StatsCard from "../components/dashboard/StatsCard";
 import RecentUploads from "../components/dashboard/RecentUploads";
 
 const Dashboard = () => {
     return (
-        <div className="flex flex-col gap-8 pt-16 pl-56 min-h-screen bg-gray-50">
+        <div className="flex flex-col gap-10 pt-20 pl-64 min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-100">
             <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <StatsCard title="Total Uploads" value={128} />
                 <StatsCard title="Storage Used" value="2.4 GB" />
@@ -18,4 +18,3 @@ const Dashboard = () => {
 }
 
 export default Dashboard;
-

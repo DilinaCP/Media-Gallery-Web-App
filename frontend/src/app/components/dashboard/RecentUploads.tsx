@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Button from "../common/Button";
 import { useRouter } from "next/navigation";
@@ -14,33 +14,36 @@ const mockUploads = [
 export default function RecentUploads() {
   const router = useRouter();
 
-  const handleSeeMore = () => {
-    router.push('/gallery');
-  }
+  const handleSeeMore = () => router.push('/gallery');
 
   return (
-    <div className="bg-white rounded-xl shadow p-6">
+    <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
       <h2 className="text-lg font-semibold mb-4">Recent Uploads</h2>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {mockUploads.map((file) => (
-          <div key={file.id} className="flex flex-col gap-2">
-            <img
-              src={file.url}
-              alt={file.name}
-              className="w-full h-28 object-cover rounded-lg border"
-            />
-            <p className="text-sm font-medium truncate">{file.name}</p>
+          <div
+            key={file.id}
+            className="group flex flex-col gap-2 p-2 rounded-xl hover:bg-gray-50 transition"
+          >
+            <div className="overflow-hidden rounded-xl">
+              <img
+                src={file.url}
+                alt={file.name}
+                className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+            </div>
+            <p className="text-sm font-semibold truncate text-gray-800">
+              {file.name}
+            </p>
             <p className="text-xs text-gray-500">{file.date}</p>
           </div>
         ))}
       </div>
-      <div className="mt-4 flex justify-center">
-        <Button
-          onClick={handleSeeMore}
-          variant='secondary'
-        >
-            See More
+
+      <div className="mt-6 flex justify-center">
+        <Button onClick={handleSeeMore} variant="secondary">
+          See More
         </Button>
       </div>
     </div>
