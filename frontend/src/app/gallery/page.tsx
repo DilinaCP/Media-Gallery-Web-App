@@ -1,11 +1,11 @@
-"use clients"
+"use client";
 
+import { useState } from "react";
 import Sidebar from "../components/layout/Sidebar";
-import Header from "../components/layout/Header"
-import Link from 'next/link';
+import Header from "../components/layout/Header";
+import ImageGrid from "../components/gallery/ImageGrid";
+import ImageCard from "../components/gallery/ImageCard";
 
-const Gallery = () => {
-    
 const mockUploads = [
   { id: 1, name: "sunset.jpg", date: "2025-01-02", url: "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=400&h=400&fit=crop&q=80" },
   { id: 2, name: "mountain.png", date: "2025-01-04", url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&q=80" },
@@ -29,34 +29,56 @@ const mockUploads = [
   { id: 20, name: "island.png", date: "2025-02-09", url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=400&fit=crop&q=80" },
 ];
 
-    return(
-        <div>
-            <div className="min-h-screen flex bg-gray-100">
-                <Sidebar />
-                <div className="flex-1 flex flex-col">
-                    <Header />
-                    <div className="grid grid-cols-2 md:grid-cols-4 p-10 gap-8 pt-20 pl-56 min-h-screen">
-                        {mockUploads.map((img) => (
-                            <Link
-                                key={img.id}
-                                href={`/gallery/${img.id}`}
-                                className="block bg-white rounded-lg shadow p-2 hover:scale-105 transition"
-                            >
-                                <img
-                                src={img.url}
-                                alt={img.name}
-                                className="w-full h-40 object-cover rounded"
-                                />
-                                <p className="mt-2 text-sm font-medium text-center">
-                                {img.name}
-                                </p>
-                            </Link>
-                        ))}
-                    </div>
-                </div>
-            </div>  
-        </div>
-    )
-}
+export default function GalleryPage() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-export default Gallery;
+  const openImage = (index: number) => {
+    setActiveIndex(index);
+  };
+
+  const closeImage = () => {
+    setActiveIndex(null);
+  };
+
+  const goPrev = () => {
+    if (activeIndex === null) return;
+    if (activeIndex > 0) {
+      setActiveIndex(activeIndex - 1);
+    }
+  };
+
+  const goNext = () => {
+    if (activeIndex === null) return;
+    if (activeIndex < mockUploads.length - 1) {
+      setActiveIndex(activeIndex + 1);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex bg-gray-100">
+      <Sidebar />
+
+      <div className="flex-1 flex flex-col">
+        <Header />
+
+        <div className="p-10 pt-20 pl-56">
+          <ImageGrid
+            images={mockUploads}
+            onImageClick={openImage}
+          />
+        </div>
+
+        {activeIndex !== null && (
+          <ImageCard
+            image={mockUploads[activeIndex]}
+            onClose={closeImage}
+            onPrev={goPrev}
+            onNext={goNext}
+            disablePrev={activeIndex === 0}
+            disableNext={activeIndex === mockUploads.length - 1}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
