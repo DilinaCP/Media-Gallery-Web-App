@@ -6,6 +6,7 @@ import Header from "../components/layout/Header";
 import ImageGrid from "../components/gallery/ImageGrid";
 import ImageCard from "../components/gallery/ImageCard";
 
+
 const mockUploads = [
   { id: 1, name: "sunset.jpg", date: "2025-01-02", url: "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=400&h=400&fit=crop&q=80" },
   { id: 2, name: "mountain.png", date: "2025-01-04", url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&q=80" },
@@ -75,6 +76,8 @@ export default function GalleryPage() {
             disableNext={activeIndex === mockUploads.length - 1}
           />
         )}
+
+
       </div>
     </div>
   );
