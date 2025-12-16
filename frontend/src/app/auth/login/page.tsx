@@ -111,7 +111,8 @@ import { useAuth } from "@/app/hooks/useAuth";
                         {apiError && <div className='text-red-500 text-sm w-full text-center'>{apiError}</div>}
                         <button 
                             type='button'
-                            className='text-blue-600 ml-2 cursor-pointer text-sm'>
+                            className='text-blue-600 ml-2 cursor-pointer text-sm'
+                            onClick={() => router.push('/auth/forgot-password')}>
                                 Forgot Password?
                         </button>
                         <div className='w-full justify-center'>
