@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -9,10 +9,12 @@ import Button from '@/app/components/common/Button';
  const LoginForm = () => {
         const router = useRouter();
         const [error, setError] = useState<{ email?: string; password?: string }>({});
+        const [apiError, setApiError] = useState('');
+        const [isLoading, setIsLoading] = useState(false);
         const [showPassword, setShowPassword] = useState(false);
         const [formData, setFormData] = useState({
-            email: 'admin@gmail.com',
-            password: '12345',
+            email: '',
+            password: '',
         });
 
         const validationForm = (data:any) => {
@@ -30,7 +32,7 @@ import Button from '@/app/components/common/Button';
             return error;
         };
 
-        const handleChange = (e: any) => {
+        const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
             const {name, value} = e.target;
             setFormData({
                 ...formData,
@@ -38,14 +40,47 @@ import Button from '@/app/components/common/Button';
             });
         };
 
-        const handleSubmit = (e: any) => {
+        const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
             e.preventDefault();
+            setApiError('');
             const validationErrors = validationForm(formData);
             setError(validationErrors);
 
             if (Object.keys(validationErrors).length === 0){
-                console.log('Form Data: ', formData)
-                router.push('/dashboard');
+                try {
+                    setIsLoading(true);
+                    const response = await fetch('http://localhost:4000/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: formData.email,
+                            password: formData.password,
+                        }),
+                    });
+
+                    if (!response.ok) {
+                        const errorBody = await response.json().catch(() => ({}));
+                        const message = errorBody?.message || 'Login failed. Please try again.';
+                        setApiError(message);
+                        return;
+                    }
+
+                    const data = await response.json();
+                    if (data?.token) {
+                        localStorage.setItem('token', data.token);
+                    }
+                    if (data?.user) {
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                    }
+
+                    router.push('/dashboard');
+                } catch (err) {
+                    setApiError('Unable to reach the server. Please try again.');
+                } finally {
+                    setIsLoading(false);
+                }
             }
         };
 
@@ -92,6 +127,7 @@ import Button from '@/app/components/common/Button';
                             </span>
                             {error.password && <div className='text-red-500 text-sm mt-1'>{error.password}</div>}
                         </div>
+                        {apiError && <div className='text-red-500 text-sm w-full text-center'>{apiError}</div>}
                         <button 
                             type='button'
                             className='text-blue-600 ml-2 cursor-pointer text-sm'>
@@ -101,8 +137,9 @@ import Button from '@/app/components/common/Button';
                             <Button
                                 type='submit'
                                 className='w-full'
+                                disabled={isLoading}
                             >
-                                LogIn
+                                {isLoading ? 'Logging In...' : 'LogIn'}
                             </Button>
                         </div>
                         <p className="text-gray-500 text-sm">

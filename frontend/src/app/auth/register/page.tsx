@@ -3,22 +3,28 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Button from '@/app/components/common/Button';
 
 const SignupForm = () => {
     const router = useRouter();
-    const [error, setError] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
+    const [error, setError] = useState<{ name?: string; email?: string; password?: string; confirmPassword?: string }>({});
+    const [apiError, setApiError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [formData, setFormData] = useState({
+        name: '',
         email: '',
         password: '',
         confirmPassword: '',
     });
 
     const validationForm = (data: any) => {
-        let error: {email?: string; password?: string; confirmPassword?: string } = {};
+        let error: {name?: string; email?: string; password?: string; confirmPassword?: string } = {};
+        if(!data.name.trim()){
+            error.name = 'Name is required';
+        }
         if(!data.email.trim()){
             error.email = 'Email is Invalid';
         } else if (!/\S+@\S+\.\S+/.test(data.email)){
@@ -45,14 +51,40 @@ const SignupForm = () => {
         });
     };
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
+        setApiError('');
         const validationErrors = validationForm(formData);
         setError(validationErrors);
 
         if (Object.keys(validationErrors).length === 0){
-            console.log('Form Data: ', formData)
-            router.push('/auth/login');
+            try {
+                setIsLoading(true);
+                const response = await fetch('http://localhost:4000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: formData.name,
+                        email: formData.email,
+                        password: formData.password,
+                    }),
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.json().catch(() => ({}));
+                    const message = errorBody?.message || 'Registration failed. Please try again.';
+                    setApiError(message);
+                    return;
+                }
+
+                router.push('/auth/login');
+            } catch (err) {
+                setApiError('Unable to reach the server. Please try again.');
+            } finally {
+                setIsLoading(false);
+            }
         }
     }
 
@@ -73,6 +105,18 @@ const SignupForm = () => {
                     </div>
                     <form onSubmit={handleSubmit}
                     className="flex flex-col gap-4 mt-4 w-96 items-center">
+                        <div>
+                            <input
+                                className="w-96 px-4 py-2 rounded-lg border bg-white"
+                                type="text"
+                                id='name'
+                                name="name"
+                                placeholder="Full Name"
+                                value={formData.name}
+                                onChange={handleChange}
+                            />
+                            {error.name && <span className='text-red-500 text-sm mt-1'>{error.name}</span>}
+                        </div>
                         <div>
                             <input
                                 className="w-96 px-4 py-2 rounded-lg border bg-white" 
@@ -121,11 +165,13 @@ const SignupForm = () => {
                             </span>
                             {error.confirmPassword && <div className='text-red-500 text-sm mt-1'>{error.confirmPassword}</div>}
                         </div>
+                        {apiError && <div className='text-red-500 text-sm w-full text-center'>{apiError}</div>}
                             <Button
                                 type='submit'
                                 className='w-full'
+                                disabled={isLoading}
                             >
-                                Sign Up
+                                {isLoading ? 'Signing Up...' : 'Sign Up'}
                             </Button>
                         <p className="text-gray-500 text-sm">
                             Already have an account?
