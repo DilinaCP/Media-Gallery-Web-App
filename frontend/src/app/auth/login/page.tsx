@@ -1,21 +1,27 @@
-"use client"
+"use client";
 
-import { useState, type ChangeEvent, type FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
-import { FcGoogle } from 'react-icons/fc';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import Button from '@/app/components/common/Button';
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { FcGoogle } from "react-icons/fc";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Button from "@/app/components/common/Button";
+import { ApiError } from "@/app/lib/api";
+import { useAuth } from "@/app/hooks/useAuth";
 
  const LoginForm = () => {
         const router = useRouter();
+        const { login, isLoading, error: authError } = useAuth();
         const [error, setError] = useState<{ email?: string; password?: string }>({});
         const [apiError, setApiError] = useState('');
-        const [isLoading, setIsLoading] = useState(false);
         const [showPassword, setShowPassword] = useState(false);
         const [formData, setFormData] = useState({
             email: '',
             password: '',
         });
+
+        useEffect(() => {
+            if (authError) setApiError(authError);
+        }, [authError]);
 
         const validationForm = (data:any) => {
             let error: { email?: string; password?: string } = {};
@@ -48,38 +54,13 @@ import Button from '@/app/components/common/Button';
 
             if (Object.keys(validationErrors).length === 0){
                 try {
-                    setIsLoading(true);
-                    const response = await fetch('http://localhost:4000/api/auth/login', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            email: formData.email,
-                            password: formData.password,
-                        }),
-                    });
-
-                    if (!response.ok) {
-                        const errorBody = await response.json().catch(() => ({}));
-                        const message = errorBody?.message || 'Login failed. Please try again.';
-                        setApiError(message);
-                        return;
-                    }
-
-                    const data = await response.json();
-                    if (data?.token) {
-                        localStorage.setItem('token', data.token);
-                    }
-                    if (data?.user) {
-                        localStorage.setItem('user', JSON.stringify(data.user));
-                    }
-
+                    await login({ email: formData.email, password: formData.password });
                     router.push('/dashboard');
                 } catch (err) {
-                    setApiError('Unable to reach the server. Please try again.');
-                } finally {
-                    setIsLoading(false);
+                    const message = err instanceof ApiError || err instanceof Error
+                        ? err.message
+                        : 'Unable to reach the server. Please try again.';
+                    setApiError(message);
                 }
             }
         };

@@ -1,8 +1,10 @@
 "use client"
 
 import Link from "next/link";
+import { useAuth } from "@/app/hooks/useAuth";
 
 const Sidebar = () => {
+  const { isAdmin } = useAuth();
   return (
     <div>
       <div className="min-h-screen fixed">
@@ -15,10 +17,12 @@ const Sidebar = () => {
             <Link href="/contact" className="hover:text-blue-400">Contact</Link>
             <Link href="/zip" className="hover:text-blue-400">Zip</Link>
             </nav>
-            <div className="border-t border-gray-700 w-50 mt-auto pt-4 flex flex-col gap-2 items-center">
-              <Link href="/admin/users" className="hover:text-yellow-400">User Management</Link>
-              <Link href="/admin/messages" className="hover:text-yellow-400">Messages</Link>
-            </div>
+            {isAdmin && (
+              <div className="border-t border-gray-700 w-50 mt-auto pt-4 flex flex-col gap-2 items-center">
+                <Link href="/admin/users" className="hover:text-yellow-400">User Management</Link>
+                <Link href="/admin/messages" className="hover:text-yellow-400">Messages</Link>
+              </div>
+            )}
           </aside>
         </div>
       </div>

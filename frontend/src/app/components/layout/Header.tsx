@@ -4,11 +4,12 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Modal from '../common/Modal';
 import ProfileCard from '../common/Profile';
-import { userEmail } from '@/app/lib/auth';
 import Button from '../common/Button';
+import { useAuth } from '@/app/hooks/useAuth';
 
 const Header = () => {
   const router = useRouter();
+  const { user, logout } = useAuth();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
 
@@ -22,7 +23,7 @@ const Header = () => {
 
   const handleLogoutConfirm = () => {
     setShowLogoutModal(false);
-    router.push('/auth/login');
+    logout('/auth/login');
   };
 
   const handleLogoutCancel = () => {
@@ -38,7 +39,7 @@ const Header = () => {
               onClick={handleProfileClick}
               className="text-sm text-gray-600 hover:text-gray-900 cursor-pointer transition-colors"
             >
-            {userEmail}
+            {user?.email ?? 'Profile'}
             </button>
             {showProfileModal && (
               <ProfileCard 

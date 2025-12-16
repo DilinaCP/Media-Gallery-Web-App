@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from 'react';
-import { userEmail, userRole } from '@/app/lib/auth';
+import { useMemo, useState } from 'react';
 import Button from './Button';
+import { useAuth } from '@/app/hooks/useAuth';
 
 type Profile = {
   email: string;
@@ -17,11 +17,12 @@ interface ProfileCardProps {
 
 export default function ProfileCard({ isModal = false, isOpen = false, onClose = () => {} }: ProfileCardProps) {
   const [showModal, setShowModal] = useState(isOpen);
+  const { user: authUser } = useAuth();
 
-  const user: Profile = {
-    email: userEmail,
-    role: userRole,
-  };
+  const user: Profile = useMemo(() => ({
+    email: authUser?.email ?? 'Unknown',
+    role: (authUser?.role ?? 'user').toLowerCase(),
+  }), [authUser]);
 
   const handleClose = () => {
     setShowModal(false);

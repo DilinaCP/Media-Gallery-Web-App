@@ -1,16 +1,18 @@
-"use client"
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { FcGoogle } from 'react-icons/fc';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import Button from '@/app/components/common/Button';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { FcGoogle } from "react-icons/fc";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Button from "@/app/components/common/Button";
+import { ApiError } from "@/app/lib/api";
+import { useAuth } from "@/app/hooks/useAuth";
 
 const SignupForm = () => {
     const router = useRouter();
+    const { register: registerUser, isLoading, error: authError } = useAuth();
     const [error, setError] = useState<{ name?: string; email?: string; password?: string; confirmPassword?: string }>({});
     const [apiError, setApiError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [formData, setFormData] = useState({
@@ -19,6 +21,10 @@ const SignupForm = () => {
         password: '',
         confirmPassword: '',
     });
+
+    useEffect(() => {
+        if (authError) setApiError(authError);
+    }, [authError]);
 
     const validationForm = (data: any) => {
         let error: {name?: string; email?: string; password?: string; confirmPassword?: string } = {};
@@ -59,31 +65,17 @@ const SignupForm = () => {
 
         if (Object.keys(validationErrors).length === 0){
             try {
-                setIsLoading(true);
-                const response = await fetch('http://localhost:4000/api/auth/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        name: formData.name,
-                        email: formData.email,
-                        password: formData.password,
-                    }),
+                await registerUser({
+                    name: formData.name,
+                    email: formData.email,
+                    password: formData.password,
                 });
-
-                if (!response.ok) {
-                    const errorBody = await response.json().catch(() => ({}));
-                    const message = errorBody?.message || 'Registration failed. Please try again.';
-                    setApiError(message);
-                    return;
-                }
-
                 router.push('/auth/login');
             } catch (err) {
-                setApiError('Unable to reach the server. Please try again.');
-            } finally {
-                setIsLoading(false);
+                const message = err instanceof ApiError || err instanceof Error
+                    ? err.message
+                    : 'Unable to reach the server. Please try again.';
+                setApiError(message);
             }
         }
     }
