@@ -1,45 +1,78 @@
 "use client";
 
-import Button from "../common/Button";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Button from "../common/Button";
 
-const mockUploads = [
-  { id: 1, name: "sunset.jpg", date: "2025-01-02", url: "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=400&h=400&fit=crop&q=80" },
-  { id: 2, name: "mountain.png", date: "2025-01-04", url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&q=80" },
-  { id: 3, name: "cityscape.jpg", date: "2025-01-06", url: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=400&h=400&fit=crop&q=80" },
-  { id: 4, name: "forest.png", date: "2025-01-08", url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=400&fit=crop&q=80" },
-  { id: 5, name: "beach.jpg", date: "2025-01-10", url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=400&fit=crop&q=80" },
-];
+type ImageItem = {
+  _id: string;
+  url: string;
+  name?: string;
+  publicId?: string;
+  createdAt?: string;
+};
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000/api";
+
+const formatName = (img: ImageItem) => img.name ?? img.publicId?.split("/").pop() ?? "Image";
+const formatDate = (img: ImageItem) =>
+  img.createdAt ? new Date(img.createdAt).toLocaleDateString() : "";
 
 export default function RecentUploads() {
   const router = useRouter();
+  const [images, setImages] = useState<ImageItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleSeeMore = () => router.push('/gallery');
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch(`${API_BASE}/images?limit=8`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (!res.ok) throw new Error("Failed to load images");
+        setImages(await res.json());
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  const handleSeeMore = () => router.push("/gallery");
 
   return (
     <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
       <h2 className="text-lg font-semibold mb-4">Recent Uploads</h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {mockUploads.map((file) => (
-          <div
-            key={file.id}
-            className="group flex flex-col gap-2 p-2 rounded-xl hover:bg-gray-50 transition"
-          >
-            <div className="overflow-hidden rounded-xl">
-              <img
-                src={file.url}
-                alt={file.name}
-                className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110"
-              />
+      {loading ? (
+        <p className="text-sm text-gray-500">Loading...</p>
+      ) : images.length === 0 ? (
+        <p className="text-sm text-gray-500">No uploads yet.</p>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {images.map((file) => (
+            <div
+              key={file._id}
+              className="group flex flex-col gap-2 p-2 rounded-xl hover:bg-gray-50 transition"
+            >
+              <div className="overflow-hidden rounded-xl">
+                <img
+                  src={file.url}
+                  alt={formatName(file)}
+                  className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110"
+                />
+              </div>
+              <p className="text-sm font-semibold truncate text-gray-800">
+                {formatName(file)}
+              </p>
+              <p className="text-xs text-gray-500">{formatDate(file)}</p>
             </div>
-            <p className="text-sm font-semibold truncate text-gray-800">
-              {file.name}
-            </p>
-            <p className="text-xs text-gray-500">{file.date}</p>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <div className="mt-6 flex justify-center">
         <Button onClick={handleSeeMore} variant="secondary">
