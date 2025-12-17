@@ -7,6 +7,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Button from "@/app/components/common/Button";
 import { ApiError } from "@/app/lib/api";
 import { useAuth } from "@/app/hooks/useAuth";
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
  const LoginForm = () => {
         const router = useRouter();
@@ -134,12 +136,35 @@ import { useAuth } from "@/app/hooks/useAuth";
                             </button>
                         </p>
                         <hr className='border- overflow-visible w-full'/>
-                        <button 
-                            className="w-96 cursor-pointer flex items-center justify-center gap-2" 
-                            type="button">
-                                <FcGoogle size={20} />
-                                <span className='text-sm'>Login with Google</span>
-                        </button>
+                        <GoogleLogin
+                            onSuccess={async (res) => {
+                                try {
+                                    const { data } = await axios.post(
+                                        "http://localhost:4000/api/auth/google",
+                                        { credential: res.credential }
+                                    );
+
+                                    const user = {
+                                        id: data._id,
+                                        name: data.name,
+                                        email: data.email,
+                                        role: data.role || 'user',
+                                    };
+                                    
+                                    localStorage.setItem("token", data.token);
+                                    localStorage.setItem("user", JSON.stringify(user));
+
+                                    router.push('/dashboard');
+                                } catch (error) {
+                                    console.error("Google login error:", error);
+                                    setApiError("Google authentication failed. Please try again.");
+                                }
+                            }}
+                            onError={() => {
+                                console.log("Login Failed");
+                                setApiError("Google authentication failed. Please try again.");
+                            }}
+                        />
                     </form>
                 </div>
             </div>                                                 
