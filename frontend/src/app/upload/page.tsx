@@ -78,10 +78,8 @@ const Upload = () => {
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-purple-900">
       <Sidebar />
-      <div className="fixed top-0 left-64 right-0 h-16 bg-gradient-to-r from-slate-900 to-purple-900 border-b border-purple-500/20 shadow-lg z-30">
-        <Header />
-      </div>
-      <div className="ml-64 pt-24 flex flex-col min-h-screen">
+      <Header />
+      <div className="ml-0 md:ml-64 pt-16 md:pt-24 flex flex-col min-h-screen">
         <div className="flex justify-center items-center p-8 pb-20">
           <div className="w-full max-w-4xl space-y-8">
             <div className="flex items-center gap-4 mb-8">

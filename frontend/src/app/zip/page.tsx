@@ -18,10 +18,8 @@ export default function ZipPage() {
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-purple-900">
       <Sidebar />
-      <div className="fixed top-0 left-64 right-0 h-16 bg-gradient-to-r from-slate-900 to-purple-900 border-b border-purple-500/20 shadow-lg z-30">
-        <Header />
-      </div>
-      <div className="ml-64 pt-24 p-8 pb-20 space-y-6">
+      <Header />
+      <div className="ml-0 md:ml-64 pt-16 md:pt-24 p-4 sm:p-6 md:p-8 pb-20 space-y-4 sm:space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent">Download as ZIP</h1>
           <button

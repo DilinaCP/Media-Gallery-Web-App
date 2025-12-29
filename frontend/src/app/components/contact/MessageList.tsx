@@ -33,6 +33,7 @@ const MessageList = () => {
     }, []);
 
     useEffect(() => {
+        setMounted(true);
         const token = getToken();
         const socket: Socket = io(socketUrl, {
             transports: ["websocket"],
@@ -89,22 +90,22 @@ const MessageList = () => {
 
             <div className="flex flex-col divide-y divide-gray-100">
                 {messages.map((msg) => (
-                    <div key={msg._id} className="py-4 flex flex-col gap-1">
-                        <div className="flex justify-between items-center gap-3">
-                            <div>
-                                <p className="font-medium text-gray-700">{msg.name}</p>
-                                <p className="text-sm text-gray-500">{msg.email}</p>
+                    <div key={msg._id} className="py-4 flex flex-col gap-2">
+                        <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-2 sm:gap-3">
+                            <div className="min-w-0">
+                                <p className="font-medium text-gray-700 break-words">{msg.name}</p>
+                                <p className="text-sm text-gray-500 break-words">{msg.email}</p>
                             </div>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                                 {msg.createdAt && mounted && (
-                                    <p className="text-sm text-gray-400">
+                                    <p className="text-xs sm:text-sm text-gray-400 ml-auto sm:ml-0 whitespace-nowrap">
                                         {new Date(msg.createdAt).toLocaleDateString()}
                                     </p>
                                 )}
                                 {!msg.isRead && (
                                     <Button
                                         variant="secondary"
-                                        className="px-3 py-1 text-sm"
+                                        className="w-full sm:w-auto px-3 py-2 text-xs sm:text-sm"
                                         onClick={() => markAsRead(msg._id)}
                                         disabled={isLoading}
                                     >
@@ -113,7 +114,7 @@ const MessageList = () => {
                                 )}
                             </div>
                         </div>
-                        <p className="text-gray-600">{msg.message}</p>
+                        <p className="text-gray-600 break-words">{msg.message}</p>
                         {msg.isRead && <p className="text-xs text-green-600 font-semibold">Read</p>}
                     </div>
                 ))}

@@ -41,10 +41,8 @@ function AdminMessagesContent() {
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-purple-900">
       <Sidebar />
-      <div className="fixed top-0 left-64 right-0 h-16 bg-linear-to-r from-slate-900 to-purple-900 border-b border-purple-500/20 shadow-lg z-30">
-        <Header />
-      </div>
-      <div className="ml-64 pt-24 p-8 pb-20">
+      <Header />
+      <div className="ml-0 md:ml-64 pt-16 md:pt-24 p-4 sm:p-6 md:p-8 pb-20">
         <h1 className="text-3xl font-bold mb-8 bg-linear-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent">Messages</h1>
 
         <div className="bg-slate-800/50 backdrop-blur rounded-2xl shadow-2xl border border-purple-500/20">
@@ -62,32 +60,32 @@ function AdminMessagesContent() {
             <div key={msg._id} className="border-b border-slate-700 last:border-none hover:bg-slate-700/20 transition-colors">
               <button
                 onClick={() => setOpenId(openId === msg._id ? null : msg._id)}
-                className="w-full text-left p-6 flex justify-between items-center"
+                className="w-full text-left p-4 sm:p-6 flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-2 sm:gap-4"
               >
-                <div>
-                  <p className="font-semibold text-gray-200">
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-200 break-words">
                     {msg.name} • {msg.email}
                   </p>
-                  <p className="text-sm text-gray-400 truncate max-w-xl">
+                  <p className="text-sm text-gray-400 truncate sm:max-w-xl max-w-full">
                     {msg.message}
                   </p>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-gray-400">
+                <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-400 mt-1 sm:mt-0 self-start sm:self-auto">
                   {!msg.isRead && (
                     <span className="px-2 py-1 rounded-full bg-blue-500/30 text-blue-300 text-xs border border-blue-500/50 font-semibold">
                       New
                     </span>
                   )}
-                  {mounted && <span className="whitespace-nowrap">{new Date(msg.createdAt).toLocaleString()}</span>}
+                  {mounted && <span className="hidden sm:inline whitespace-nowrap shrink-0">{new Date(msg.createdAt).toLocaleString()}</span>}
                 </div>
               </button>
 
               {openId === msg._id && (
-                <div className="px-6 pb-6 text-gray-300 space-y-3 border-t border-slate-700 bg-slate-700/10">
-                  <p className="pt-3">{msg.message}</p>
+                <div className="px-4 sm:px-6 pb-6 text-gray-300 space-y-3 border-t border-slate-700 bg-slate-700/10">
+                  <p className="pt-3 break-words">{msg.message}</p>
                   {!msg.isRead && (
                     <button
-                      className="px-3 py-1 text-xs rounded bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 transition-all font-semibold"
+                      className="w-full sm:w-auto px-3 py-2 text-xs sm:text-sm rounded bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 transition-all font-semibold"
                       onClick={() => markRead(msg._id)}
                       disabled={updatingId === msg._id}
                     >

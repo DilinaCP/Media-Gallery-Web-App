@@ -35,6 +35,17 @@ export default function ProfileCard({ isModal = false, isOpen = false, onClose =
     onClose();
   };
 
+  // Prevent background scroll while modal is open
+  useEffect(() => {
+    if (isModal && isOpen) {
+      const original = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = original;
+      };
+    }
+  }, [isModal, isOpen]);
+
   const profileContent = (
     <>
       <div className="flex items-center gap-3 mb-6">
@@ -66,18 +77,24 @@ export default function ProfileCard({ isModal = false, isOpen = false, onClose =
     return (
       <>
         {mounted && (isModal || showModal) && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6">
             <div 
               className="fixed inset-0 bg-black/50 backdrop-blur-sm"
               onClick={handleClose}
             ></div>
-            <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6 z-10 border border-slate-200/50">
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="profile-dialog-title"
+              className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md md:max-w-xl lg:max-w-2xl p-4 sm:p-6 md:p-8 z-[70] border border-slate-200/50 max-h-[85vh] overflow-auto"
+            >
               <button
                 onClick={handleClose}
                 className="absolute top-4 right-4 p-1 rounded-lg hover:bg-slate-100 transition-colors"
               >
                 <X size={20} className="text-slate-600" />
               </button>
+              <div id="profile-dialog-title" className="sr-only">Profile</div>
               {profileContent}
               <div className="flex justify-end gap-3 mt-6">
                 <Button

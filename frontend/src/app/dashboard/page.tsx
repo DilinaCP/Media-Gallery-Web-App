@@ -50,11 +50,11 @@ const Dashboard = () => {
     return (
         <div className="min-h-screen bg-linear-to-br from-slate-950 via-purple-900 to-slate-900">
             <Sidebar />
-            <div className="ml-64 flex flex-col min-h-screen">
+            <div className="ml-0 md:ml-64 flex flex-col min-h-screen">
                 <Header />
-                <div className="flex flex-col gap-10 pt-20 px-6 pb-20">
+                <div className="flex flex-col gap-6 md:gap-10 pt-16 md:pt-20 px-4 sm:px-6 pb-20">
                 <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent mb-2">
+                <h1 className="text-4xl font-bold bg-linear-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent mb-2">
                     {isAdmin ? "Admin Dashboard" : "My Dashboard"}
                 </h1>
                 <p className="text-slate-400">Welcome back, <span className="text-purple-300 font-semibold">{user?.email?.split('@')[0]}</span>!</p>
