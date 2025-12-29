@@ -19,7 +19,7 @@ interface Props {
 }
 
 const formatName = (img: ImageItem) =>
-  img.publicId?.split("/").pop() ?? img.name ?? "Image";
+  img.name?.trim() || img.publicId?.split("/").pop() || "Image";
 const formatDate = (img: ImageItem) =>
   img.createdAt ? new Date(img.createdAt).toLocaleDateString() : "";
 

@@ -5,6 +5,7 @@ type ImageItem = {
   url: string;
   publicId?: string;
   createdAt?: string;
+  name?: string;
 };
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
   onImageClick: (index: number) => void;
 }
 
-const formatName = (img: ImageItem) => img.publicId?.split("/").pop() ?? "Image";
+const formatName = (img: ImageItem) => img.name?.trim() || img.publicId?.split("/").pop() || "Image";
 
 export default function ImageGrid({ images, onImageClick }: Props) {
   return (

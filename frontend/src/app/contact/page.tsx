@@ -10,7 +10,7 @@ const ContactPage = () => {
         <div className="min-h-screen flex bg-gray-100">
             <Sidebar />
 
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col ml-50">
                 <Header />
 
                 <div className="flex-1 flex items-center justify-center p-8 bg-linear-to-br from-gray-50 via-white to-gray-100">

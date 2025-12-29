@@ -1,18 +1,38 @@
 "use client";
 
 import { useState } from "react";
+import api from "@/app/lib/api";
 import Button from "../common/Button";
 
 const ContactForm = () => {
     const [form, setForm] = useState({ name: "", email: "", message: "" });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Form submitted:", form);
+        setError(null);
+        setSuccess(null);
+        setIsSubmitting(true);
+
+        try {
+            const response = await api.post<{ message: string }>("/contact", form);
+            setSuccess(response.message || "Message sent successfully.");
+            setForm({ name: "", email: "", message: "" });
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Failed to send message. Please try again.");
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -28,7 +48,8 @@ const ContactForm = () => {
                 placeholder="Your Name"
                 value={form.name}
                 onChange={handleChange}
-                className="border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-gray-500"
+                required
+                className="border border-gray-300 p-3 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             />
 
             <input
@@ -37,7 +58,8 @@ const ContactForm = () => {
                 placeholder="Your Email"
                 value={form.email}
                 onChange={handleChange}
-                className="border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-gray-500"
+                required
+                className="border border-gray-300 p-3 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             />
 
             <textarea
@@ -46,12 +68,16 @@ const ContactForm = () => {
                 rows={5}
                 value={form.message}
                 onChange={handleChange}
-                className="border border-gray-200 p-3 rounded-xl resize-none focus:outline-none focus:border-gray-500"
+                required
+                className="border border-gray-300 p-3 rounded-lg text-gray-800 placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             />
 
+            {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
+            {success && <p className="text-sm text-green-600 font-medium">{success}</p>}
+
             <div className="flex justify-end">
-                <Button variant="primary" type="submit">
-                    Send Message
+                <Button variant="primary" type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? "Sending..." : "Send Message"}
                 </Button>
             </div>
         </form>
