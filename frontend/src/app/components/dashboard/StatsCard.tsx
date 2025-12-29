@@ -26,13 +26,13 @@ export default function StatsCard({
   };
 
   return (
-    <div className={`bg-gradient-to-br ${bgGradients[variant]} rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-white/50 group`}>
+    <div className={`bg-linear-to-br ${bgGradients[variant]} rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-white/50 group`}>
       <div className="flex items-start justify-between mb-4">
         <h3 className="text-slate-600 text-sm uppercase tracking-widest font-semibold">
           {title}
         </h3>
         {Icon && (
-          <div className={`p-3 rounded-lg bg-gradient-to-br ${gradients[variant]} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+          <div className={`p-3 rounded-lg bg-linear-to-br ${gradients[variant]} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
             <Icon size={20} />
           </div>
         )}

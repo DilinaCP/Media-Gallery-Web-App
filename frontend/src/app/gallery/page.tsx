@@ -54,14 +54,14 @@ export default function GalleryPage() {
     setActiveIndex((prev) => (prev !== null && prev < images.length - 1 ? prev + 1 : prev));
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-purple-900">
+    <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-purple-900">
       <Sidebar />
       <div className="ml-64 flex flex-col min-h-screen">
         <Header />
         <div className="p-8 pt-24 pb-20">
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-3">
-              <div className="p-3 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 text-white">
+              <div className="p-3 rounded-lg bg-linear-to-br from-purple-500 to-pink-500 text-white">
                 <ImagesIcon size={24} />
               </div>
               <div>

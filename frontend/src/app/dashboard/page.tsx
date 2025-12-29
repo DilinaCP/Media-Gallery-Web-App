@@ -48,7 +48,7 @@ const Dashboard = () => {
     const hasError = isAdmin ? adminError : userError;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-900 to-slate-900">
+        <div className="min-h-screen bg-linear-to-br from-slate-950 via-purple-900 to-slate-900">
             <Sidebar />
             <div className="ml-64 flex flex-col min-h-screen">
                 <Header />

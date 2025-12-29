@@ -64,8 +64,8 @@ const ForgotPasswordPage = () => {
 	};
 
 	return (
-		<div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-950 via-purple-900 to-slate-900 px-4">
-			<div className="box-border p-8 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 shadow-2xl w-full max-w-md">
+		<div className="flex items-center justify-center min-h-screen bg-linear-to-br from-slate-950 via-purple-900 to-slate-900 px-4">
+			<div className="box-border p-8 rounded-2xl bg-linear-to-br from-slate-800 to-slate-900 border border-slate-700/50 shadow-2xl w-full max-w-md">
 				<div className="text-center mb-6">
 					<h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
 						{step === "request" ? "Forgot Password" : "Reset Password"}

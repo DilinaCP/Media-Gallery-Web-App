@@ -51,9 +51,9 @@ export default function RecentUploads() {
   const handleSeeMore = () => router.push("/gallery");
 
   return (
-    <div className="bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-2xl shadow-lg border border-slate-200/50 p-6">
+    <div className="bg-linear-to-br from-slate-50 to-slate-100/50 rounded-2xl shadow-lg border border-slate-200/50 p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2.5 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 text-white">
+        <div className="p-2.5 rounded-lg bg-linear-to-br from-purple-500 to-pink-500 text-white">
           <ImageIcon size={20} />
         </div>
         <h2 className="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">

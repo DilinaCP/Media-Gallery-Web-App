@@ -76,7 +76,7 @@ const Upload = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-purple-900">
+    <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-purple-900">
       <Sidebar />
       <div className="fixed top-0 left-64 right-0 h-16 bg-gradient-to-r from-slate-900 to-purple-900 border-b border-purple-500/20 shadow-lg z-30">
         <Header />
@@ -85,7 +85,7 @@ const Upload = () => {
         <div className="flex justify-center items-center p-8 pb-20">
           <div className="w-full max-w-4xl space-y-8">
             <div className="flex items-center gap-4 mb-8">
-              <div className="p-4 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 text-white">
+              <div className="p-4 rounded-lg bg-linear-to-br from-purple-500 to-pink-500 text-white">
                 <UploadIcon size={28} />
               </div>
               <div>
@@ -96,7 +96,7 @@ const Upload = () => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl border border-slate-700/50 p-8">
+            <div className="bg-linear-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl border border-slate-700/50 p-8">
               <Dropzone onFilesSelected={handleFilesSelected} />
 
               {files.length > 0 && (

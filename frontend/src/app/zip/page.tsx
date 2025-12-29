@@ -16,7 +16,7 @@ export default function ZipPage() {
   const images = data ?? [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-purple-900">
+    <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-purple-900">
       <Sidebar />
       <div className="fixed top-0 left-64 right-0 h-16 bg-gradient-to-r from-slate-900 to-purple-900 border-b border-purple-500/20 shadow-lg z-30">
         <Header />

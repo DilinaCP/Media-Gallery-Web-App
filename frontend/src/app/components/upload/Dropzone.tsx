@@ -91,8 +91,8 @@ export default function Dropzone({ onFilesSelected }: DropzoneProps) {
         {...getRootProps()}
         className={`border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 ${
           isDragActive 
-            ? "border-purple-500 bg-gradient-to-br from-purple-50 to-pink-50 scale-105" 
-            : "border-slate-300 bg-gradient-to-br from-slate-50 to-slate-100 hover:border-purple-400 hover:from-slate-100 hover:to-slate-100"
+            ? "border-purple-500 bg-linear-to-br from-purple-50 to-pink-50 scale-105" 
+            : "border-slate-300 bg-linear-to-br from-slate-50 to-slate-100 hover:border-purple-400 hover:from-slate-100 hover:to-slate-100"
         }`}
       >
         <input {...getInputProps()} />
@@ -100,7 +100,7 @@ export default function Dropzone({ onFilesSelected }: DropzoneProps) {
           <div className={`p-3 rounded-full transition-colors duration-300 ${
             isDragActive 
               ? "bg-purple-500 text-white" 
-              : "bg-gradient-to-br from-purple-500 to-pink-500 text-white"
+              : "bg-linear-to-br from-purple-500 to-pink-500 text-white"
           }`}>
             <UploadCloud size={32} />
           </div>

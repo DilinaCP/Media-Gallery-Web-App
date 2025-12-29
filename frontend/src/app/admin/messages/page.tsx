@@ -39,13 +39,13 @@ function AdminMessagesContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-purple-900">
+    <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-purple-900">
       <Sidebar />
-      <div className="fixed top-0 left-64 right-0 h-16 bg-gradient-to-r from-slate-900 to-purple-900 border-b border-purple-500/20 shadow-lg z-30">
+      <div className="fixed top-0 left-64 right-0 h-16 bg-linear-to-r from-slate-900 to-purple-900 border-b border-purple-500/20 shadow-lg z-30">
         <Header />
       </div>
       <div className="ml-64 pt-24 p-8 pb-20">
-        <h1 className="text-3xl font-bold mb-8 bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent">Messages</h1>
+        <h1 className="text-3xl font-bold mb-8 bg-linear-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent">Messages</h1>
 
         <div className="bg-slate-800/50 backdrop-blur rounded-2xl shadow-2xl border border-purple-500/20">
           {isLoading && (
