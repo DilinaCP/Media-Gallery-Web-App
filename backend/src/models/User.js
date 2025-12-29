@@ -39,6 +39,21 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+
+    status: {
+      type: String,
+      enum: ["active", "suspended"],
+      default: "active",
+    },
+
+    resetOtp: {
+      type: String,
+      select: false,
+    },
+
+    resetOtpExpires: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );
