@@ -1,6 +1,6 @@
 // Minimal fetch wrapper with sensible defaults for this app.
 
-import { getToken } from "./auth";
+import { clearAuth, getToken } from "./auth";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
@@ -10,6 +10,7 @@ type ApiRequestConfig<TBody> = {
 	headers?: HeadersInit;
 	token?: string;
 	cache?: RequestCache;
+	skipAuth?: boolean;
 };
 
 export class ApiError extends Error {
@@ -29,9 +30,9 @@ async function request<TResponse, TBody = unknown>(
 	path: string,
 	config: ApiRequestConfig<TBody> = {}
 ): Promise<TResponse> {
-	const { method = "GET", data, headers, token, cache = "no-store" } = config;
+	const { method = "GET", data, headers, token, cache = "no-store", skipAuth = false } = config;
 
-	const authToken = token ?? getToken();
+	const authToken = !skipAuth ? (token ?? getToken()) : undefined;
 
 	const mergedHeaders: HeadersInit = {
 		"Content-Type": "application/json",
@@ -54,6 +55,17 @@ async function request<TResponse, TBody = unknown>(
 
 	if (!response.ok) {
 		const message = (body as { message?: string })?.message ?? "Request failed";
+
+		if (
+			response.status === 403 &&
+			typeof window !== "undefined" &&
+			message === "Account suspended"
+		) {
+			clearAuth();
+			window.location.href = "/auth/suspended";
+			return null as unknown as TResponse;
+		}
+
 		throw new ApiError(message, response.status, body);
 	}
 
@@ -70,16 +82,16 @@ const safeJsonParse = (value: string) => {
 
 const api = {
 	request,
-	get: <TResponse>(path: string, headers?: HeadersInit) =>
-		request<TResponse>(path, { method: "GET", headers }),
-	post: <TResponse, TBody = unknown>(path: string, data: TBody, headers?: HeadersInit) =>
-		request<TResponse, TBody>(path, { method: "POST", data, headers }),
-	put: <TResponse, TBody = unknown>(path: string, data: TBody, headers?: HeadersInit) =>
-		request<TResponse, TBody>(path, { method: "PUT", data, headers }),
-	patch: <TResponse, TBody = unknown>(path: string, data: TBody, headers?: HeadersInit) =>
-		request<TResponse, TBody>(path, { method: "PATCH", data, headers }),
-	delete: <TResponse>(path: string, headers?: HeadersInit) =>
-		request<TResponse>(path, { method: "DELETE", headers }),
+	get: <TResponse>(path: string, headers?: HeadersInit, skipAuth?: boolean) =>
+		request<TResponse>(path, { method: "GET", headers, skipAuth }),
+	post: <TResponse, TBody = unknown>(path: string, data: TBody, headers?: HeadersInit, skipAuth?: boolean) =>
+		request<TResponse, TBody>(path, { method: "POST", data, headers, skipAuth }),
+	put: <TResponse, TBody = unknown>(path: string, data: TBody, headers?: HeadersInit, skipAuth?: boolean) =>
+		request<TResponse, TBody>(path, { method: "PUT", data, headers, skipAuth }),
+	patch: <TResponse, TBody = unknown>(path: string, data: TBody, headers?: HeadersInit, skipAuth?: boolean) =>
+		request<TResponse, TBody>(path, { method: "PATCH", data, headers, skipAuth }),
+	delete: <TResponse>(path: string, headers?: HeadersInit, skipAuth?: boolean) =>
+		request<TResponse>(path, { method: "DELETE", headers, skipAuth }),
 };
 
 export default api;

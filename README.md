@@ -39,31 +39,53 @@ This application enables users to create and manage personal or shared media gal
 - **User Capabilities**
   - Submit messages through contact form
   - Edit and delete own messages
+  - Real-time message status updates
   
 - **Admin Capabilities**
-  - View all submitted messages
+  - View all submitted messages with real-time notifications
   - Delete messages and manage submissions
+  - Message list with search and filtering
+
+### 🔔 Real-time Features
+- Socket.IO integration for live updates
+- Real-time message notifications for admins
+- Live user status updates
+- Instant feedback on account suspension/activation
 
 ### 👤 User Management (Admin Only)
 - View and edit user profiles (name, email, role)
 - Manage user roles and permissions
-- Soft-delete or deactivate user accounts
-- User activity monitoring
+- Suspend/unsuspend user accounts with real-time status updates
+- User activity monitoring and statistics
+- Track active, suspended, and admin users
 
 ## Tech Stack
 
-- **Frontend**: Next.js
-- **Backend**: Node.js with Express.js
-- **Database**: MongoDB
-- **Authentication**: Google OAuth 2.0, JWT
-- **File Storage**: Cloud/Local storage for media files
+### Frontend
+- **Framework**: Next.js 16 with TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Lucide React icons, React Icons
+- **File Handling**: React Dropzone, JSZip, FileSaver
+- **Real-time**: Socket.IO Client
+- **Authentication**: React OAuth Google
+
+### Backend
+- **Runtime**: Node.js with Express.js 5
+- **Database**: MongoDB with Mongoose
+- **Authentication**: Google OAuth 2.0, JWT, bcrypt
+- **File Storage**: Cloudinary (cloud storage)
+- **File Processing**: Multer, Archiver (ZIP creation)
+- **Real-time**: Socket.IO
+- **Email**: Nodemailer (OTP verification)
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js (v14 or higher)
+- Node.js (v20 or higher)
 - MongoDB (local or cloud instance)
 - Google OAuth credentials
+- Cloudinary account (for image storage)
+- Gmail account (for OTP verification)
 
 ### Installation
 
@@ -86,26 +108,85 @@ This application enables users to create and manage personal or shared media gal
    ```
 
 4. Configure environment variables
-   - Create `.env` files in both backend and frontend directories
-   - Add required variables (MongoDB URI, Google OAuth credentials, JWT secret, etc.)
+   
+   **Backend `.env`:**
+   ```
+   PORT=5000
+   MONGO_URI=your_mongodb_connection_string
+   JWT_SECRET=your_jwt_secret
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
+   CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+   CLOUDINARY_API_KEY=your_cloudinary_api_key
+   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+   EMAIL_USER=your_gmail_address
+   EMAIL_PASS=your_gmail_app_password
+   ```
+   
+   **Frontend `.env.local`:**
+   ```
+   NEXT_PUBLIC_API_URL=http://localhost:5000
+   NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
+   ```
 
 5. Run the application
    ```bash
    # Backend (from backend directory)
-   npm start
+   npm run dev    # Development mode with nodemon
+   # or
+   npm start      # Production mode
    
    # Frontend (from frontend directory, in a new terminal)
-   npm start
+   npm run dev    # Development mode
+   # or
+   npm start      # Production mode
    ```
 
 ## Project Structure
 
 ```
 Media-Gallery-Web-App/
-├── backend/          # Express.js API server
-├── frontend/         # React.js client application
+├── backend/              # Express.js API server
+│   ├── src/
+│   │   ├── config/      # Database and Cloudinary configuration
+│   │   ├── controllers/ # Business logic (auth, admin, images, etc.)
+│   │   ├── middleware/  # Authentication and file upload middleware
+│   │   ├── models/      # MongoDB schemas (User, Image, Message)
+│   │   ├── routes/      # API endpoints
+│   │   ├── utils/       # Email utilities
+│   │   ├── app.js       # Express app configuration
+│   │   └── server.js    # Server entry point with Socket.IO
+│   └── package.json
+├── frontend/            # Next.js 16 with TypeScript
+│   ├── src/
+│   │   └── app/
+│   │       ├── admin/           # Admin pages (users, messages)
+│   │       ├── auth/            # Authentication pages
+│   │       ├── components/      # Reusable UI components
+│   │       ├── contact/         # Contact form page
+│   │       ├── dashboard/       # User dashboard
+│   │       ├── gallery/         # Image gallery
+│   │       ├── hooks/           # Custom React hooks
+│   │       ├── lib/             # API and auth utilities
+│   │       ├── upload/          # Image upload page
+│   │       └── zip/             # ZIP download page
+│   └── package.json
 └── README.md
 ```
+
+## Key Features Implementation
+
+### Account Suspension
+- Admins can suspend user accounts
+- Suspended users are automatically logged out
+- Dedicated suspended account page
+- Real-time status synchronization via Socket.IO
+
+### Image Storage
+- Cloudinary integration for reliable cloud storage
+- Automatic image optimization and transformation
+- Secure upload with multer middleware
+- Support for JPG/PNG formats up to 5MB
 
 ## License
 

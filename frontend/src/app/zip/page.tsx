@@ -16,34 +16,34 @@ export default function ZipPage() {
   const images = data ?? [];
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-purple-900">
       <Sidebar />
-      <div className="flex-1 flex flex-col">
+      <div className="fixed top-0 left-64 right-0 h-16 bg-gradient-to-r from-slate-900 to-purple-900 border-b border-purple-500/20 shadow-lg z-30">
         <Header />
-        <div className="p-10 pt-20 pl-56 space-y-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-semibold text-gray-800">Download as ZIP</h1>
-            <button
-              onClick={() => refetch()}
-              disabled={isLoading}
-              className="px-4 py-2 text-sm font-semibold rounded bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-60"
-            >
-              {isLoading ? "Loading..." : "Refresh"}
-            </button>
-          </div>
-
-          {error && (
-            <p className="text-sm text-red-600 font-medium">
-              {error}
-            </p>
-          )}
-
-          {isLoading && <p className="text-gray-600">Loading images...</p>}
-          {!isLoading && images.length > 0 && <Zip images={images} />}
-          {!isLoading && images.length === 0 && !error && (
-            <p className="text-gray-600">No images available yet. Upload some first.</p>
-          )}
+      </div>
+      <div className="ml-64 pt-24 p-8 pb-20 space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent">Download as ZIP</h1>
+          <button
+            onClick={() => refetch()}
+            disabled={isLoading}
+            className="px-4 py-2 text-sm font-semibold rounded bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 disabled:opacity-60 transition-all"
+          >
+            {isLoading ? "Loading..." : "Refresh"}
+          </button>
         </div>
+
+        {error && (
+          <p className="text-sm text-red-400 font-medium">
+            {error}
+          </p>
+        )}
+
+        {isLoading && <p className="text-gray-300">Loading images...</p>}
+        {!isLoading && images.length > 0 && <Zip images={images} />}
+        {!isLoading && images.length === 0 && !error && (
+          <p className="text-gray-300">No images available yet. Upload some first.</p>
+        )}
       </div>
     </div>
   );

@@ -33,6 +33,7 @@ export const registerUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        status: user.status,
       },
     });
   } catch (error) {
@@ -76,6 +77,7 @@ export const loginUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        status: user.status,
       },
     });
   } catch (error) {
@@ -121,6 +123,7 @@ export const requestPasswordReset = async (req, res) => {
 
     res.json({ message: "If an account exists, an OTP has been sent" });
   } catch (error) {
+    console.error("requestPasswordReset error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -168,6 +171,7 @@ export const resetPassword = async (req, res) => {
 
     res.json({ message: "Password reset successful" });
   } catch (error) {
+    console.error("resetPassword error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

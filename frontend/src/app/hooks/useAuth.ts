@@ -16,6 +16,7 @@ type AuthHookState = {
 	error: string | null;
 	isAuthenticated: boolean;
 	isAdmin: boolean;
+	isSuspended: boolean;
 	login: (payload: LoginPayload) => Promise<AuthUser>;
 	register: (payload: RegisterPayload) => Promise<AuthUser>;
 	logout: (redirectTo?: string) => void;
@@ -29,6 +30,7 @@ const defaultState: AuthHookState = {
 	error: null,
 	isAuthenticated: false,
 	isAdmin: false,
+	isSuspended: false,
 	login: async () => {
 		throw new Error("Auth hook not initialized");
 	},
@@ -131,6 +133,11 @@ export const useAuth = (): AuthHookState => {
 		[user?.role]
 	);
 
+	const isSuspended = useMemo(
+		() => (user?.status ?? "").toLowerCase() === "suspended",
+		[user?.status]
+	);
+
 	return {
 		user,
 		token,
@@ -139,6 +146,7 @@ export const useAuth = (): AuthHookState => {
 		error,
 		isAuthenticated,
 		isAdmin,
+		isSuspended,
 		login,
 		register,
 		logout,

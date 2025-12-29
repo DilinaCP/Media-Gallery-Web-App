@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "../common/Button";
+import { Image as ImageIcon, Calendar } from "lucide-react";
 
 type ImageItem = {
   _id: string;
@@ -22,13 +23,19 @@ export default function RecentUploads() {
   const router = useRouter();
   const [images, setImages] = useState<ImageItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const load = async () => {
       try {
-        const token = localStorage.getItem("token");
+        // Gallery is now public, no token needed for viewing
         const res = await fetch(`${API_BASE}/images?limit=8`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          headers: {},
         });
         if (!res.ok) throw new Error("Failed to load images");
         setImages(await res.json());
@@ -39,44 +46,67 @@ export default function RecentUploads() {
       }
     };
     load();
-  }, []);
+  }, [mounted]);
 
   const handleSeeMore = () => router.push("/gallery");
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-      <h2 className="text-lg font-semibold mb-4">Recent Uploads</h2>
+    <div className="bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-2xl shadow-lg border border-slate-200/50 p-6">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2.5 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 text-white">
+          <ImageIcon size={20} />
+        </div>
+        <h2 className="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+          Recent Uploads
+        </h2>
+      </div>
 
       {loading ? (
-        <p className="text-sm text-gray-500">Loading...</p>
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin">
+            <div className="w-8 h-8 border-3 border-slate-300 border-t-purple-500 rounded-full"></div>
+          </div>
+          <p className="ml-3 text-slate-600 font-medium">Loading...</p>
+        </div>
       ) : images.length === 0 ? (
-        <p className="text-sm text-gray-500">No uploads yet.</p>
+        <div className="text-center py-12">
+          <ImageIcon size={40} className="mx-auto mb-3 text-slate-400" />
+          <p className="text-slate-600 font-medium">No uploads yet.</p>
+          <p className="text-sm text-slate-500">Start by uploading your first image!</p>
+        </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {images.map((file) => (
             <div
               key={file._id}
-              className="group flex flex-col gap-2 p-2 rounded-xl hover:bg-gray-50 transition"
+              className="group flex flex-col rounded-xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+              onClick={() => router.push("/gallery")}
             >
-              <div className="overflow-hidden rounded-xl">
+              <div className="overflow-hidden relative bg-slate-200 aspect-square">
                 <img
                   src={file.url}
                   alt={formatName(file)}
-                  className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
-              <p className="text-sm font-semibold truncate text-gray-800">
-                {formatName(file)}
-              </p>
-              <p className="text-xs text-gray-500">{formatDate(file)}</p>
+              <div className="p-3 flex-1 flex flex-col justify-between">
+                <p className="text-sm font-semibold truncate text-slate-900 group-hover:text-purple-600 transition-colors">
+                  {formatName(file)}
+                </p>
+                <div className="flex items-center gap-1 text-xs text-slate-500">
+                  <Calendar size={12} />
+                  <span>{mounted && formatDate(file)}</span>
+                </div>
+              </div>
             </div>
           ))}
         </div>
       )}
 
-      <div className="mt-6 flex justify-center">
+      <div className="mt-8 flex justify-center">
         <Button onClick={handleSeeMore} variant="secondary">
-          See More
+          View All Images
         </Button>
       </div>
     </div>

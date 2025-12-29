@@ -19,6 +19,7 @@ type Message = {
 const MessageList = () => {
     const { data, isLoading, error, refetch } = useFetch<Message[]>("/contact");
     const [messages, setMessages] = useState<Message[]>([]);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         if (data) {
@@ -95,7 +96,7 @@ const MessageList = () => {
                                 <p className="text-sm text-gray-500">{msg.email}</p>
                             </div>
                             <div className="flex items-center gap-3">
-                                {msg.createdAt && (
+                                {msg.createdAt && mounted && (
                                     <p className="text-sm text-gray-400">
                                         {new Date(msg.createdAt).toLocaleDateString()}
                                     </p>

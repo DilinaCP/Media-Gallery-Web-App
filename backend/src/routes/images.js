@@ -5,7 +5,20 @@ import Image from "../models/Image.js";
 
 const router = express.Router();
 
-router.get("/", protect, async (req, res) => {
+router.get("/stats", protect, async (req, res) => {
+  try {
+    const imageCount = await Image.countDocuments({ user: req.user.id });
+    res.json({
+      images: {
+        total: imageCount,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch user stats", error: err.message });
+  }
+});
+
+router.get("/", async (req, res) => {
   try {
     const limit = Math.min(parseInt(req.query.limit, 10) || 0, 100);
     const images = await Image.find()

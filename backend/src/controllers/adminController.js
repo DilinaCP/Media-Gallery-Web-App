@@ -1,4 +1,6 @@
 import User from "../models/User.js";
+import Image from "../models/Image.js";
+import Message from "../models/Message.js";
 
 const sanitizeUser = (user) => {
   const obj = user.toObject();
@@ -63,5 +65,45 @@ export const updateUserStatus = async (req, res) => {
   } catch (error) {
     console.error("updateUserStatus error", error);
     res.status(500).json({ message: "Failed to update user status" });
+  }
+};
+
+export const getStats = async (req, res) => {
+  try {
+    const [userCounts, imageCount, messageCounts] = await Promise.all([
+      Promise.all([
+        User.countDocuments(),
+        User.countDocuments({ status: "active" }),
+        User.countDocuments({ status: "suspended" }),
+        User.countDocuments({ role: "admin" }),
+      ]),
+      Image.countDocuments(),
+      Promise.all([
+        Message.countDocuments(),
+        Message.countDocuments({ isRead: false }),
+      ]),
+    ]);
+
+    const [totalUsers, activeUsers, suspendedUsers, adminUsers] = userCounts;
+    const [totalMessages, unreadMessages] = messageCounts;
+
+    res.json({
+      users: {
+        total: totalUsers,
+        active: activeUsers,
+        suspended: suspendedUsers,
+        admins: adminUsers,
+      },
+      images: {
+        total: imageCount,
+      },
+      messages: {
+        total: totalMessages,
+        unread: unreadMessages,
+      },
+    });
+  } catch (error) {
+    console.error("getStats error", error);
+    res.status(500).json({ message: "Failed to fetch stats" });
   }
 };

@@ -38,14 +38,22 @@ export const googleAuth = async (req, res) => {
       });
     }
 
+    if (user.status === "suspended") {
+      return res.status(403).json({ message: "Account suspended" });
+    }
+
     const token = generateToken(user._id);
 
     res.status(200).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      avatar: user.avatar,
       token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        status: user.status,
+        avatar: user.avatar,
+      },
     });
   } catch (error) {
     console.error("Google auth error:", error);

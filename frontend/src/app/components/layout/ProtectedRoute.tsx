@@ -17,20 +17,28 @@ const ProtectedRoute = ({
 	redirectTo = "/auth/login",
 }: ProtectedRouteProps) => {
 	const router = useRouter();
-	const { isAuthenticated, isAdmin, initializing } = useAuth();
+	const { isAuthenticated, isAdmin, isSuspended, initializing, logout } = useAuth();
 
 	useEffect(() => {
 		if (initializing) return;
 
 		if (!isAuthenticated) {
 			router.replace(redirectTo);
-		} else if (requireAdmin && !isAdmin) {
+			return;
+		}
+
+		if (isSuspended) {
+			logout("/auth/suspended");
+			return;
+		}
+
+		if (requireAdmin && !isAdmin) {
 			router.replace("/dashboard");
 		}
-	}, [initializing, isAuthenticated, requireAdmin, isAdmin, router, redirectTo]);
+	}, [initializing, isAuthenticated, isSuspended, requireAdmin, isAdmin, router, redirectTo, logout]);
 
 	if (initializing) return <Loader />;
-	if (!isAuthenticated) return null;
+	if (!isAuthenticated || isSuspended) return null;
 
 	return <>{children}</>;
 };
